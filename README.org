@@ -1,0 +1,61 @@
+#+TITLE: VIP Common Lisp Utilities
+
+* VIP Utils
+This is a collection of random useful lisp functions and macros and
+some experiments.
+
+file:functions.lisp contains some simple useful (sometimes) functions,
+and also something to check if a password has been pwned. 
+
+file:macros.lisp contains some simple utility macros, including a
+shorthand notation for simple lambda expressions /followed by/ some
+macros for doing some syntax rewriting of lisp code to allow
+continuation passing style transformation and something like Haskell
+'do' notation. These macros end up yielding code which looks a bit
+non-lispy, but in some cases can be easy to read. These are mostly
+used later on when writing monadic lisp code.
+
+Then there are some threading macros, a'la Clojure, some oddments and,
+finally, the ~tlet~ macro. 
+
+~tlet~ is like ~let~ except that it allows you to specify a type which
+the value bound to the variable must satisfy. The value is checked at
+runtime and, if the check fails, then a very informative error
+message - describing the expected type, the returned value /and/ the
+expression which yielded that value. If no type is given the default
+type is ~'(not null)~, which dissallows ~NIL~ values being bound
+(unless you specify a different type). 
+
+#+begin_src lisp
+(in-package :vip-utils)
+
+(tlet* ((x (+ 1 2 3) 'integer)
+        (y (when (> x 10)
+             (1+ x))))
+  (list x y))
+
+;; In the expression (WHEN (> X 10) (1+ X)): The value NIL is not of the expected type (NOT NULL).
+;;  [Condition of type EXPRESSION-TYPE-ERROR]
+
+#+end_src
+
+file:more-functions.lisp is a further assortment of utility functions. 
+
+file:mop-utilities.lisp contains functions for creating programmatic
+classes at runtime. This allows creating an instance of several
+subclasses without having to declare that class ahead of time. It is
+described in 'The Art of the Metaobject Protocol'. Presently specific
+to Clozure Common Lisp - it should be changed to use Closer MOP for
+compatibility with more CL implementations. 
+
+file:conditions.lisp just contains an 'invalid-form-value' condition,
+which we have used in web applications. 
+
+file:types.lisp defines a nice ~tuple~ type :)  
+
+file:names.lisp contains various tables of names of people which I
+pulled from wikipedia and then manipulated into first/last names
+etc. This is useful for generating test data, or anonymizing existing
+customer information while still making it obvious whether things are
+working properly, as we can generate plausible names, titles etc. Also
+company names, which are ficticious companies. 
