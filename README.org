@@ -51,7 +51,8 @@ compatibility with more CL implementations.
 file:conditions.lisp just contains an 'invalid-form-value' condition,
 which we have used in web applications. 
 
-file:types.lisp defines a nice ~tuple~ type :)  
+file:types.lisp defines a nice ~tuple~ type and a function to compute
+the cardinality of CL types from typespecs.  
 
 file:names.lisp contains various tables of names of people which I
 pulled from wikipedia and then manipulated into first/last names
